@@ -43,7 +43,7 @@ class Valve:
         self.closed: bool = GPIO.input(self.closed_pin)
         self.open: bool = GPIO.input(self.open_pin)
 
-    def step(self):
+    def step(self): # step the motor
         GPIO.output(self.step_pin, GPIO.HIGH)
         time.sleep(self.step_delay)
         GPIO.output(self.step_pin, GPIO.LOW)
