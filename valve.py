@@ -43,24 +43,26 @@ class Valve:
         self.closed: bool = GPIO.input(self.closed_pin)
         self.open: bool = GPIO.input(self.open_pin)
 
-    def open(self):
+    def step(self):
+        GPIO.output(self.step_pin, GPIO.HIGH)
+        time.sleep(self.step_delay)
+        GPIO.output(self.step_pin, GPIO.LOW)
+        time.sleep(self.step_delay)
+
+    def open_valve(self):
+        self.read()
         # drive motor counterclockwise
         GPIO.output(self.dir_pin, GPIO.HIGH)
         # step until self.open == True
         while not self.open:
-            GPIO.output(self.step_pin, GPIO.HIGH)
-            time.sleep(self.step_delay)
-            GPIO.output(self.step_pin, GPIO.LOW)
-            time.sleep(self.step_delay)
+            self.step()
             self.read()
 
-    def close(self):
+    def close_valve(self):
+        self.read()
         # drive motor clockwise
         GPIO.output(self.dir_pin, GPIO.LOW)
         # step until self.closed == True
         while not self.closed:
-            GPIO.output(self.step_pin, GPIO.HIGH)
-            time.sleep(self.step_delay)
-            GPIO.output(self.step_pin, GPIO.LOW)
-            time.sleep(self.step_delay)
+            self.step()
             self.read()
